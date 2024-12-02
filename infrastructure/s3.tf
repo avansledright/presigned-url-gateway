@@ -9,3 +9,15 @@ resource "aws_s3_bucket_versioning" "storage" {
     status = "Enabled"
   }
 }
+
+resource "aws_s3_bucket_cors_configuration" "storage" {
+  bucket = aws_s3_bucket.storage.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "GET"]
+    allowed_origins = ["*"]
+    expose_headers  = []
+    max_age_seconds = 3000
+  }
+}

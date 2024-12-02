@@ -7,6 +7,7 @@ A serverless AWS infrastructure for generating secure, time-limited presigned UR
 - API Gateway endpoint that accepts GET requests
 - Lambda function to generate presigned URLs
 - S3 bucket with versioning enabled
+- Frontend interface for direct S3 uploads and downloads
 - Infrastructure defined using Terraform
 
 ## Requirements
@@ -14,14 +15,16 @@ A serverless AWS infrastructure for generating secure, time-limited presigned UR
 - AWS Account
 - Terraform ~> 5.0
 - Python 3.11
+- Node.js and npm
 - Postman (for testing)
 
 ## Infrastructure Components
 
-- **S3 Bucket**: Versioned storage bucket for objects
+- **S3 Bucket**: Versioned storage bucket with CORS enabled
 - **API Gateway**: REST API with a single GET endpoint `/getUrl`
 - **Lambda Function**: Python 3.11 function to generate presigned URLs
 - **IAM Roles**: Required permissions for Lambda to access S3
+- **Frontend**: TypeScript-based web interface for direct S3 interaction
 
 ## API Usage
 
@@ -41,6 +44,7 @@ Response:
 
 ## Deployment
 
+### Backend
 1. Initialize Terraform:
 ```bash
 terraform init
@@ -51,13 +55,39 @@ terraform init
 terraform apply
 ```
 
-3. A Postman collection is automatically generated for testing.
+### Frontend
+1. Navigate to frontend directory:
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create `.env` file:
+```
+AWS_REGION=your-region
+AWS_ACCESS_KEY=your-access-key
+AWS_SECRET_KEY=your-secret-key
+S3_BUCKET=my-secure-storage-bucket
+API_ENDPOINT=your-api-gateway-url
+```
+
+4. Build the frontend:
+```bash
+npm run build
+```
+
+5. Serve the frontend files using your preferred web server
 
 ## Security Features
 
 - CORS enabled with appropriate headers
 - URL expiration controls
 - S3 bucket versioning
+- Direct S3 uploads for large files
 - Error handling for missing parameters and S3 errors
 
 ## Notes
@@ -65,3 +95,4 @@ terraform apply
 - Default region: us-west-2
 - Default URL expiration: 1 hour
 - Cross-origin requests allowed
+- Frontend supports direct S3 uploads to bypass API Gateway file size limitations

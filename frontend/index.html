@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3 File Manager</title>
+</head>
+<body>
+    <div id="app">
+        <h2>Upload File to S3</h2>
+        <input type="file" id="fileInput">
+        <button onclick="handleUpload()">Upload</button>
+        
+        <h2>Download File from S3</h2>
+        <input type="text" id="fileKey" placeholder="Enter S3 file key">
+        <button onclick="handleDownload()">Get Download Link</button>
+        
+        <div id="downloadSection"></div>
+    </div>
+    <script src="dist/main.js"></script>
+</body>
+</html>
