@@ -16,6 +16,11 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_basic" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 resource "aws_iam_role_policy" "lambda_policy" {
   name = "lambda_presigned_url_policy"
   role = aws_iam_role.lambda_role.id

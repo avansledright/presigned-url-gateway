@@ -46,7 +46,10 @@ async function handleDownload() {
 
     try {
         const response = await fetch(`${process.env.API_ENDPOINT}/getUrl?key=${encodeURIComponent(fileKey)}`, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'x-api-key': process.env.API_KEY!
+            }
         });
         
         if (!response.ok) throw new Error('Failed to get download URL');

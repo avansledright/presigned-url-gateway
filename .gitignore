@@ -1,0 +1,92 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.env
+.venv
+
+# IDE - VSCode
+.vscode/
+*.code-workspace
+.history/
+
+# IDE - PyCharm
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# IDE - Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+crash.log
+
+# Operating System
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Project specific
+output/
+logs/
+*.log
+test_output/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Secrets and credentials
+credentials.json
+*.pem
+*.key
+config.ini
+secrets.yaml
+.aws/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+*.tsbuildinfo
+
+# Frontend build
+dist/
+*.js.map

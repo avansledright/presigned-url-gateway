@@ -14,6 +14,8 @@ resource "aws_api_gateway_method" "presigned_url" {
   resource_id   = aws_api_gateway_resource.presigned_url.id
   http_method   = "GET"
   authorization = "NONE"
+  api_key_required = true
+
 }
 
 # API Gateway Integration
@@ -34,25 +36,51 @@ resource "aws_lambda_permission" "api_gw" {
   source_arn    = "${aws_api_gateway_rest_api.presigned_url_api.execution_arn}/*"
 }
 
-resource "aws_api_gateway_method_response" "cors" {
-  rest_api_id = aws_api_gateway_rest_api.presigned_url_api.id
-  resource_id = aws_api_gateway_resource.presigned_url.id
-  http_method = aws_api_gateway_method.presigned_url.http_method
-  status_code = "200"
-  
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true
-  }
-}
-
 # Deployment
 resource "aws_api_gateway_deployment" "prod" {
   rest_api_id = aws_api_gateway_rest_api.presigned_url_api.id
-  depends_on  = [aws_api_gateway_integration.lambda]
+  depends_on  = [
+    aws_api_gateway_integration.lambda,
+    aws_api_gateway_integration.options,
+    aws_api_gateway_integration_response.options,
+    aws_api_gateway_integration_response.cors
+  ]
+  
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_integration.options,
+      aws_api_gateway_integration_response.options,
+      aws_api_gateway_method.options
+    ]))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "prod" {
   deployment_id = aws_api_gateway_deployment.prod.id
   rest_api_id  = aws_api_gateway_rest_api.presigned_url_api.id
   stage_name   = "prod"
+}
+
+# API Key resources
+resource "aws_api_gateway_api_key" "presigned_url_key" {
+  name = "presigned-url-api-key"
+}
+
+resource "aws_api_gateway_usage_plan" "presigned_url_usage_plan" {
+  name = "presigned-url-usage-plan"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.presigned_url_api.id
+    stage  = aws_api_gateway_stage.prod.stage_name
+  }
+}
+
+resource "aws_api_gateway_usage_plan_key" "presigned_url_usage_plan_key" {
+  key_id        = aws_api_gateway_api_key.presigned_url_key.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.presigned_url_usage_plan.id
 }
